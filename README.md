@@ -1,2 +1,2 @@
-# botnolib
-a discord bot using plain websockets
+# fastcord
+another discord bot library

@@ -39,11 +39,14 @@ class Fastcord:
 
             time.sleep(self.interval / 1000 - 0.5)
     
+    def get_user(self, user_id):
+        r = requests.get(f"https://discordapp.com/api/users/{user_id}",
+            headers={ "Authorization": "Bot " + self.token })
+    
     def send_message(self, contents, channel_id, embed = {}):
         r = requests.post(f"https://discordapp.com/api/channels/{channel_id}/messages",
             headers={ "Authorization": "Bot " + self.token },
             json={ "content": contents, "embed": embed })
-        print(r.status_code)
     
     def on_message(self, ws, msg):
         if self.verbose:

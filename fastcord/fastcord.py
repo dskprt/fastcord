@@ -42,8 +42,10 @@ class Fastcord:
     def get_user(self, user_id):
         r = requests.get(f"https://discordapp.com/api/users/{user_id}",
             headers={ "Authorization": "Bot " + self.token })
+
+        return r.json()
     
-    def send_message(self, contents, channel_id, embed = {}):
+    def send_message(self, channel_id, contents = None, embed = {}):
         r = requests.post(f"https://discordapp.com/api/channels/{channel_id}/messages",
             headers={ "Authorization": "Bot " + self.token },
             json={ "content": contents, "embed": embed })

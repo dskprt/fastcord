@@ -4,7 +4,7 @@ token = ""
 
 def on_message(msg):
     if msg["content"] == "!ping":
-        bot.send_message("Pong!", msg["channel_id"])
+        bot.send_message(msg["channel_id"], "Pong!")
 
-bot = fastcord.Fastcord(token, on_message=on_message)
+bot = fastcord.Fastcord(token, von_message=on_message)
 bot.run()

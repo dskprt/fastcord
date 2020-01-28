@@ -1,7 +1,9 @@
 import fastcord
 
 token = ""
+bot = fastcord.Fastcord(token)
 
+@bot.on_event("message")
 def on_message(msg):
     if msg["content"] == "!avatar":
         info = bot.get_user_info(msg["author"]["id"])
@@ -13,5 +15,4 @@ def on_message(msg):
             }
         })
 
-bot = fastcord.Fastcord(token, on_message=on_message)
 bot.run()

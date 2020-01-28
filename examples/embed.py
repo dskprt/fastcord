@@ -1,7 +1,9 @@
 import fastcord
 
 token = ""
+bot = fastcord.Fastcord(token)
 
+@bot.on_event("message")
 def on_message(msg):
     if msg["content"] == "!embed":
 
@@ -13,6 +15,5 @@ def on_message(msg):
                 "url": "https://discordapp.com/assets/28174a34e77bb5e5310ced9f95cb480b.png"
             }
         })
-
-bot = fastcord.Fastcord(token, on_message=on_message)
+        
 bot.run()

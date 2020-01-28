@@ -3,10 +3,11 @@ import json
 import time
 import requests
 from threading import Thread
+from .events import Events
 
 class Fastcord:
 
-    def __init__(self, token, verbose=False, on_message=None, on_event=None):
+    def __init__(self, token, verbose=False):
         self.token = token
         self.verbose = verbose
         self.ws = websocket.WebSocketApp("wss://gateway.discord.gg/?v=6&encoding=json",
@@ -17,10 +18,8 @@ class Fastcord:
         self.interval = None
         self.session_id = None
         self.ready = False
-        self.events = {
-            "message": on_message,
-            "event": on_event
-        }
+        self.events = Events()
+        self.on_event = self.events.on_event()
     
     def run(self):
         self.ws.run_forever()
@@ -63,16 +62,17 @@ class Fastcord:
             self.seq = None
         
         if msg["op"] == 0:
-            if self.events["event"] != None:
-                    self.events["event"](msg)
+            self.events.call("event", msg["t"], msg["d"])
 
             if msg["t"] == "READY":
                 self.session_id = msg["d"]["session_id"]
                 self.ready = True
+
+                self.events.call("ready")
             
             if msg["t"] == "MESSAGE_CREATE":
-                if self.events["message"] != None:
-                    self.events["message"](msg["d"])
+                self.events.call("message", msg["d"])
+                
 
         if msg["op"] == 9: # opcode 9 invalid session
             time.sleep(5)

@@ -5,13 +5,13 @@ bot = fastcord.Fastcord(token)
 
 @bot.on_event("message")
 def on_message(msg):
-    if msg["content"] == "!avatar":
-        info = bot.get_user_info(msg["author"]["id"])
+    if msg.content == "!avatar":
+        info = bot.get_user(msg.author.id)
 
-        bot.send_message(msg["channel_id"], embed={
-            "title": f"{info['username']}#{info['discriminator']}",
+        msg.channel.send(embed={
+            "title": f"{info.username}#{info.discriminator}",
             "image": {
-                "url": f"https://cdn.discordapp.com/avatars/{info['id']}/{info['avatar']}.png?size=256"
+                "url": info.avatar + "?size=256"
             }
         })
 

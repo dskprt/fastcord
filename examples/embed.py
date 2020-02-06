@@ -5,10 +5,10 @@ bot = fastcord.Fastcord(token)
 
 @bot.on_event("message")
 def on_message(msg):
-    if msg["content"] == "!embed":
+    if msg.content == "!embed":
 
         # https://discordapp.com/developers/docs/resources/channel#embed-object
-        bot.send_message(msg["channel_id"], embed={
+        msg.channel.send(embed={
             "title": "Embed title",
             "description": "Embed description",
             "image": {

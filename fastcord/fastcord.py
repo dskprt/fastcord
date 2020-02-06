@@ -4,6 +4,9 @@ import time
 from threading import Thread
 from .events import Events
 from .http import *
+from .objects.message import Message
+from .objects.channel import Channel
+from .objects.user import User
 
 class Fastcord:
 
@@ -39,7 +42,7 @@ class Fastcord:
             time.sleep(self.interval / 1000 - 0.5)
     
     def get_user(self, user_id):
-        return get("https://discordapp.com/api/users/" + user_id, { "Authorization": "Bot " + self.token })
+        return User(self, get("https://discordapp.com/api/users/" + user_id, { "Authorization": "Bot " + self.token }))
     
     def send_message(self, channel_id, contents = None, embed = {}):
         post("https://discordapp.com/api/channels/" + channel_id + "/messages",
@@ -68,7 +71,7 @@ class Fastcord:
                 self.events.call("ready")
             
             if msg["t"] == "MESSAGE_CREATE":
-                self.events.call("message", msg["d"])
+                self.events.call("message", Message(self, msg["d"]))
                 
 
         if msg["op"] == 9: # opcode 9 invalid session

@@ -1,9 +1,9 @@
 import websocket
 import json
 import time
-import requests
 from threading import Thread
 from .events import Events
+from .http import *
 
 class Fastcord:
 
@@ -39,15 +39,12 @@ class Fastcord:
             time.sleep(self.interval / 1000 - 0.5)
     
     def get_user(self, user_id):
-        r = requests.get(f"https://discordapp.com/api/users/{user_id}",
-            headers={ "Authorization": "Bot " + self.token })
-
-        return r.json()
+        return get("https://discordapp.com/api/users/" + user_id, { "Authorization": "Bot " + self.token })
     
     def send_message(self, channel_id, contents = None, embed = {}):
-        r = requests.post(f"https://discordapp.com/api/channels/{channel_id}/messages",
-            headers={ "Authorization": "Bot " + self.token },
-            json={ "content": contents, "embed": embed })
+        post("https://discordapp.com/api/channels/" + channel_id + "/messages",
+            { "content": contents, "embed": embed },
+            { "Authorization": "Bot " + self.token })
     
     def on_message(self, ws, msg):
         if self.verbose:

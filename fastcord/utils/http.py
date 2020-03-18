@@ -11,7 +11,7 @@ def get(url, headers={}):
     try:
         res = urlopen(req, timeout=5)
     except HTTPError as e:
-        return e.code
+        return None
 
     code = res.getcode()
 

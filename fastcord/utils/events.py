@@ -1,6 +1,7 @@
 from functools import wraps
 
 class Events:
+
     def __init__(self, verbose = False):
         self.events = {}
         self.verbose = verbose
@@ -26,8 +27,9 @@ class Events:
             if k == event:
                 try:
                     self.events[k](*args)
-                except TypeError as e:
+                except Exception as e:
                     if self.verbose:
-                        print("Unable to execute event: " + str(e))
+                        print("Unable to execute event:")
+                        print(e)
 
                     continue

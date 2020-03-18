@@ -10,6 +10,8 @@ from .objects.user import User
 
 class Fastcord:
 
+    api = "https://discordapp.com/api"
+
     def __init__(self, token, verbose=False):
         self.token = token
         self.verbose = verbose
@@ -21,7 +23,7 @@ class Fastcord:
         self.interval = None
         self.session_id = None
         self.ready = False
-        self.events = Events()
+        self.events = Events(verbose)
         self.on_event = self.events.on_event()
     
     def run(self):
@@ -42,12 +44,10 @@ class Fastcord:
             time.sleep(self.interval / 1000 - 0.5)
     
     def get_user(self, user_id):
-        return User(self, get("https://discordapp.com/api/users/" + user_id, { "Authorization": "Bot " + self.token }))
+        return User(self, get(f"{api}/users/{user_id}", { "Authorization": "Bot " + self.token }))
     
-    def send_message(self, channel_id, contents = None, embed = {}):
-        post("https://discordapp.com/api/channels/" + channel_id + "/messages",
-            { "content": contents, "embed": embed },
-            { "Authorization": "Bot " + self.token })
+    def get_channel(self, channel_id):
+        return Channel(self, get(f"{api}/channels/{channel_id}", { "Authorization": "Bot " + self.token }))
     
     def on_message(self, ws, msg):
         if self.verbose:
@@ -72,7 +72,6 @@ class Fastcord:
             
             if msg["t"] == "MESSAGE_CREATE":
                 self.events.call("message", Message(self, msg["d"]))
-                
 
         if msg["op"] == 9: # opcode 9 invalid session
             time.sleep(5)

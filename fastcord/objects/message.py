@@ -1,20 +1,36 @@
 from .user import User
+from .embed import Embed
+from .reaction import Reaction
+from .attachment import Attachment
+from .channel import Channel
+from ..utils.dict import try_get_value
+from ..utils.http import get
 
 class Message:
 
-    def __init__(self, fastcord, msg):
+    def __init__(self, fastcord, obj):
         from .channel import Channel
-        from ..utils.http import get
 
         self.fastcord = fastcord
-        self.id = msg["id"]
-        self.channel_id = msg["channel_id"]
-        self.channel = Channel(fastcord, get("https://discordapp.com/api/channels/" + self.channel_id, { "Authorization": "Bot " + self.fastcord.token }))
-        self.author = User(fastcord, msg["author"]) if "webhook_id" not in msg["author"] else None
-        self.content = msg["content"]
-        self.tts = msg["tts"]
-        self.timestamp = msg["timestamp"]
-        self.attachments = msg["attachments"]
-        self.embed = msg["embeds"]
-        #self.reactions = msg["reactions"] or None
-        self.pinned = msg["pinned"]
+        self.id = obj["id"]
+        self.channel = Channel(fastcord, get(f"{fastcord.api}/channels/{obj['channel_id']}",
+            { "Authorization": "Bot " + fastcord.token }))
+        self.author = User(fastcord, obj["author"]) if "webhook_id" not in obj["author"] else None
+        self.content = obj["content"]
+        self.tts = obj["tts"]
+        self.timestamp = obj["timestamp"]
+        self.pinned = obj["pinned"]
+
+        self.attachments = []
+        self.embeds = []
+        self.reactions = []
+
+        for item in obj["attachments"]:
+            self.attachments.append(Attachment(fastcord, item))
+        
+        for item in obj["embeds"]:
+            self.attachments.append(Embed(fastcord, item))
+
+        if(try_get_value(obj, "reactions") != None):
+            for item in obj["reactions"]:
+                self.attachments.append(Reaction(fastcord, item))

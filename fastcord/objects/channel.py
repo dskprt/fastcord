@@ -1,7 +1,7 @@
 from enum import Enum
 from .guild import Guild
 from .message import Message
-from ..http import *
+from ..utils.http import *
 
 class Channel:
 
@@ -20,7 +20,7 @@ class Channel:
         #self.recipients = channel["recipients"] or None
         #self.owner_id = channel["owner_id"] or None
     
-    def get_guild():
+    def get_guild(self):
         return Guild(self.fastcord, get("https://discordapp.com/api/guilds/" + self.guild_id, { "Authorization": "Bot " + self.fastcord.token }))
     
     def send(self, contents = None, embed = {}):

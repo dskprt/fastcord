@@ -4,7 +4,7 @@ class Message:
 
     def __init__(self, fastcord, msg):
         from .channel import Channel
-        from ..http import get
+        from ..utils.http import get
 
         self.fastcord = fastcord
         self.id = msg["id"]

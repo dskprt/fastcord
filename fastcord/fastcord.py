@@ -2,8 +2,8 @@ import websocket
 import json
 import time
 from threading import Thread
-from .events import Events
-from .http import *
+from .utils.events import Events
+from .utils.http import *
 from .objects.message import Message
 from .objects.channel import Channel
 from .objects.user import User

@@ -4,7 +4,7 @@ from .reaction import Reaction
 from .attachment import Attachment
 from .channel import Channel
 from ..utils.dict import try_get_value
-from ..utils.http import get
+from ..utils.http import get, patch
 
 class Message:
 
@@ -34,3 +34,13 @@ class Message:
         if(try_get_value(obj, "reactions") != None):
             for item in obj["reactions"]:
                 self.attachments.append(Reaction(fastcord, item))
+
+    def edit(self, content = None, embed = None):
+        body = { }
+
+        if(content != None): body["content"] = content
+        if(embed != None): body["embed"] = embed
+
+        return Message(self.fastcord, patch(f"{self.fastcord.api}/channels/{self.channel.id}/messages/{self.id}",
+            body,
+            { "Authorization": "Bot " + self.fastcord.token }))

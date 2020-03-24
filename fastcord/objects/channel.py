@@ -25,15 +25,22 @@ class Channel:
             self.guild = Guild(self.fastcord, get(f"{fastcord.api}/guilds/{obj['guild_id']}",
                 { "Authorization": "Bot " + self.fastcord.token }))
     
-    def send(self, contents = None, embed = {}):
-        post(f"{self.fastcord.api}/channels/{self.id}/messages",
-            { "content": contents, "embed": embed },
-            { "Authorization": "Bot " + self.fastcord.token })
+    def send(self, content = None, embed = None):
+        from .message import Message
+
+        body = {}
+
+        if(content != None): body["content"] = content
+        if(embed != None): body["embed"] = embed
+
+        return Message(self.fastcord, post(f"{self.fastcord.api}/channels/{self.id}/messages",
+            body,
+            { "Authorization": "Bot " + self.fastcord.token }))
 
     def get_message(self, message_id):
         from .message import Message
 
-        return Message(self.fastcord, get(f"{fastcord.api}/channels/{self.id}/messages/{message_id}",
+        return Message(self.fastcord, get(f"{self.fastcord.api}/channels/{self.id}/messages/{message_id}",
             { "Authorization": "Bot " + self.fastcord.token }))
 
     class ChannelType(Enum):

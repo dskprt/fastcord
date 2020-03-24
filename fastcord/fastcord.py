@@ -6,6 +6,7 @@ from .utils.events import Events
 from .utils.http import *
 from .objects.message import Message
 from .objects.channel import Channel
+from .objects.guild import Guild
 from .objects.user import User
 
 class Fastcord:
@@ -44,10 +45,13 @@ class Fastcord:
             time.sleep(self.interval / 1000 - 0.5)
     
     def get_user(self, user_id):
-        return User(self, get(f"{api}/users/{user_id}", { "Authorization": "Bot " + self.token }))
+        return User(self, get(f"{self.api}/users/{user_id}", { "Authorization": "Bot " + self.token }))
+    
+    def get_guild(self, guild_id):
+        return Guild(self, get(f"{self.api}/guilds/{guild_id}", { "Authorization": "Bot " + self.token }))
     
     def get_channel(self, channel_id):
-        return Channel(self, get(f"{api}/channels/{channel_id}", { "Authorization": "Bot " + self.token }))
+        return Channel(self, get(f"{self.api}/channels/{channel_id}", { "Authorization": "Bot " + self.token }))
     
     def on_message(self, ws, msg):
         if self.verbose:

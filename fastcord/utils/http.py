@@ -11,12 +11,12 @@ def get(url, headers={}):
     try:
         res = urlopen(req, timeout=5)
     except HTTPError as e:
-        return None
+        raise e
 
     code = res.getcode()
 
     if code not in [200, 201, 204, 304]:
-        return code
+        raise RuntimeError("Invalid status code received: " + e.code)
 
     try:
         return json.loads(res.read().decode(res.info().get_param("charset") or "utf-8"))
@@ -35,12 +35,12 @@ def post(url, body="", headers={}):
     try:
         res = urlopen(req, str.encode(json.dumps(body)), timeout=5)
     except HTTPError as e:
-        return e.code
+        raise e
 
     code = res.getcode()
 
     if code not in [200, 201, 204, 304]:
-        return code
+        raise RuntimeError("Invalid status code received: " + e.code)
 
     try:
         return json.loads(res.read().decode(res.info().get_param("charset") or "utf-8"))
@@ -60,12 +60,12 @@ def patch(url, body="", headers={}):
     try:
         res = urlopen(req, str.encode(json.dumps(body)), timeout=5)
     except HTTPError as e:
-        return e.code
+        raise e
 
     code = res.getcode()
 
     if code not in [200, 201, 204, 304]:
-        return code
+        raise RuntimeError("Invalid status code received: " + e.code)
 
     try:
         return json.loads(res.read().decode(res.info().get_param("charset") or "utf-8"))

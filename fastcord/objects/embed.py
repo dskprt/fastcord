@@ -1,5 +1,6 @@
 from ..utils.dict import try_get_value
 from ..utils.color import int_from_rgb
+from ..utils.date import to_iso8601
 
 class Embed:
 
@@ -106,7 +107,7 @@ class Embed:
         return self
     
     def time(self, year, month, day, hour, minute, second):
-        self.embed["timestamp"] = f"{year}-{'{:02d}'.format(month)}-{'{:02d}'.format(day)}T{'{:02d}'.format(hour)}:{'{:02d}'.format(minute)}:{'{:02d}'.format(second)}.000Z"
+        self.embed["timestamp"] = to_iso8601(year, month, day, hour, minute, second)
         return self
     
     def footer(self, text, icon = None, override = True):

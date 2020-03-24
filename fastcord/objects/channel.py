@@ -1,6 +1,7 @@
 from enum import Enum
 from .user import User
 from .guild import Guild
+from .embed import Embed
 from ..utils.http import post, get
 from ..utils.dict import try_get_value
 
@@ -31,7 +32,12 @@ class Channel:
         body = {}
 
         if(content != None): body["content"] = content
-        if(embed != None): body["embed"] = embed
+        
+        if(embed != None):
+            if(type(embed) == dict):
+                body["embed"] = embed
+            elif(type(embed) == Embed):
+                body["embed"] = embed.embed
 
         return Message(self.fastcord, post(f"{self.fastcord.api}/channels/{self.id}/messages",
             body,

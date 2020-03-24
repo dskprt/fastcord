@@ -39,7 +39,12 @@ class Message:
         body = { }
 
         if(content != None): body["content"] = content
-        if(embed != None): body["embed"] = embed
+
+        if(embed != None):
+            if(type(embed) == dict):
+                body["embed"] = embed
+            elif(type(embed) == Embed):
+                body["embed"] = embed.embed
 
         return Message(self.fastcord, patch(f"{self.fastcord.api}/channels/{self.channel.id}/messages/{self.id}",
             body,

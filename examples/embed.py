@@ -6,14 +6,13 @@ bot = fastcord.Fastcord(token)
 @bot.on_event("message")
 def on_message(msg):
     if msg.content == "!embed":
-
-        # https://discordapp.com/developers/docs/resources/channel#embed-object
-        msg.channel.send(embed={
-            "title": "Embed title",
-            "description": "Embed description",
-            "image": {
-                "url": "https://discordapp.com/assets/28174a34e77bb5e5310ced9f95cb480b.png"
-            }
-        })
+        msg.channel.send(embed=fastcord.Embed()
+            .title("Title")
+            .description("Description")
+            .image("https://discordapp.com/assets/28174a34e77bb5e5310ced9f95cb480b.png")
+            .field("Field #1", "Value")
+            .field("Inline field #1", "Value", True)
+            .field("Inline field #2", "Value", True))
+            .footer("Footer")
         
 bot.run()

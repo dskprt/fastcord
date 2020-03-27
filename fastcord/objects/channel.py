@@ -1,8 +1,9 @@
+import json
 from enum import Enum
 from .user import User
 from .guild import Guild
 from .embed import Embed
-from ..utils.http import post, get
+from ..utils.http import post, get, multipart
 from ..utils.dict import try_get_value
 
 class Channel:
@@ -26,7 +27,7 @@ class Channel:
             self.guild = Guild(self.fastcord, get(f"{fastcord.api}/guilds/{obj['guild_id']}",
                 { "Authorization": "Bot " + self.fastcord.token }))
     
-    def send(self, content = None, embed = None):
+    def send(self, content = None, embed = None, file = None, filename="file"):
         from .message import Message
 
         body = {}
@@ -38,10 +39,14 @@ class Channel:
                 body["embed"] = embed
             elif(type(embed) == Embed):
                 body["embed"] = embed.embed
+        
+        if(file != None):
+            return Message(self.fastcord, multipart(f"{self.fastcord.api}/channels/{self.id}/messages",
+                { "payload_json,payload_json": json.dumps(body), f"file,{ filename }": file },
+                { "Authorization": "Bot " + self.fastcord.token }))
 
         return Message(self.fastcord, post(f"{self.fastcord.api}/channels/{self.id}/messages",
-            body,
-            { "Authorization": "Bot " + self.fastcord.token }))
+            body, { "Authorization": "Bot " + self.fastcord.token }))
 
     def get_message(self, message_id):
         from .message import Message

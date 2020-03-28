@@ -76,7 +76,7 @@ def patch(url, body="", headers={}):
 def multipart(url, files, headers={}):
     body, content_type = encode_multipart_formdata(files)
 
-    req = Request(url, headers=headers, data=str.encode(body))
+    req = Request(url, headers=headers, data=body)
     req.add_header("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0")
     req.add_header("Content-Type", content_type)
 
@@ -99,12 +99,16 @@ def multipart(url, files, headers={}):
 
 # https://julien.danjou.info/handling-multipart-form-data-python/
 def encode_multipart_formdata(fields):
-    boundary = binascii.hexlify(os.urandom(16)).decode('ascii')
-    body = ""
+    boundary = binascii.hexlify(os.urandom(16))
+    body = b""
 
     for key, value in fields.items():
-        name = key.split(",")[0]
-        filename = key.split(",")[1]
+        if(type(value) != tuple):
+            value = (key, value)
+        
+        name = key
+        filename = value[0]
+        contents = value[1]
 
         content = "text/plain"
 
@@ -123,16 +127,35 @@ def encode_multipart_formdata(fields):
         elif(filename.endswith(".mp4")):
             content = "video/mp4"
         
-        _filename = f" filename=\"{filename}\""
+        body += b"--"
+        body += boundary
+        body += b"\r\n"
 
-        body += "".join(f"--{boundary}\r\n"
-            f"Content-Disposition: attachment; name=\"{name}\";{_filename if name != 'payload_json' else ''}\r\n"
-            f"Content-Type: {content}\r\n"
-            "\r\n"
-            f"{value}\r\n"
-            )
+        body += b"Content-Disposition: attachment; name=\""
+        body += name.encode("latin-1")
+        body += b"\";"
+
+        if(filename != None):
+            body += b" filename=\""
+            body += filename.encode("latin-1")
+
+        body += b"\"\r\n"
+        body += b"Content-Type: "
+        body += content.encode("latin-1")
+        body += b"\r\n"
+        #body += b"\r\n"
+
+        if(type(contents) == str):
+            body += contents.encode("latin-1")
+        else:
+            body += contents
+
+        body += b"\r\n"
     
-    body += f"--{boundary}--"
-    content_type = f"multipart/form-data; boundary={boundary}"
+    body += b"--"
+    body += boundary
+    body += b"--"
+
+    content_type = f"multipart/form-data; boundary={boundary.decode('latin-1')}"
 
     return body, content_type

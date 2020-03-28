@@ -42,7 +42,7 @@ class Channel:
         
         if(file != None):
             return Message(self.fastcord, multipart(f"{self.fastcord.api}/channels/{self.id}/messages",
-                { "payload_json,payload_json": json.dumps(body), f"file,{ filename }": file },
+                { "payload_json": (None, json.dumps(body)), f"file": (filename, file) },
                 { "Authorization": "Bot " + self.fastcord.token }))
 
         return Message(self.fastcord, post(f"{self.fastcord.api}/channels/{self.id}/messages",

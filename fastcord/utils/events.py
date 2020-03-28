@@ -28,8 +28,7 @@ class Events:
                 try:
                     self.events[k](*args)
                 except Exception as e:
-                    if self.verbose:
-                        print("Unable to execute event:")
-                        print(e)
+                    print(f"Unable to execute event \"{k}\": ", end="")
+                    print(e)
 
                     continue

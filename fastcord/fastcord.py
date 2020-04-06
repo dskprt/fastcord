@@ -8,6 +8,8 @@ from .objects.message import Message
 from .objects.channel import Channel
 from .objects.guild import Guild
 from .objects.user import User
+from .objects.activity import Activity
+from .objects.presence import Presence
 
 class Fastcord:
 
@@ -44,6 +46,35 @@ class Fastcord:
 
             time.sleep(self.interval / 1000 - 0.5)
     
+    def change_presence(self, presence):
+        if(type(presence) == Presence):
+            presence = presence.presence
+        
+        if(presence["status"] == None):
+            raise TypeError("Presence status must be defined!")
+
+        self.ws.send(json.dumps({
+            "op": 3,
+            "d": presence
+        }))
+    
+    def change_activity(self, activity):
+        if(type(activity) == Activity):
+            activity = activity.activity
+        
+        if(activity["name"] == None or activity["type"] == None):
+            raise TypeError("Activity name and type must be defined!")
+
+        self.ws.send(json.dumps({
+            "op": 3,
+            "d": {
+                "since": None,
+                "game": activity,
+                "status": "online",
+                "afk": False
+            }
+        }))
+    
     def get_user(self, user_id):
         return User(self, get(f"{self.api}/users/{user_id}", { "Authorization": "Bot " + self.token }))
     
@@ -71,6 +102,9 @@ class Fastcord:
             if msg["t"] == "READY":
                 self.session_id = msg["d"]["session_id"]
                 self.ready = True
+
+                self.username = msg["d"]["user"]["username"]
+                self.id = msg["d"]["user"]["id"]
 
                 self.events.call("ready")
             

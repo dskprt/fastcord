@@ -1,5 +1,5 @@
 ![fastcord](../assets/logo.png?raw=true)  
-[![PyPI version](https://badge.fury.io/py/fastcord.svg)](https://badge.fury.io/py/fastcord)
+[![PyPI version](https://badge.fury.io/py/fastcord.svg)](https://badge.fury.io/py/fastcord)  
 just another discord api wrapper for writing bots
 
 [Website](https://dskprt.github.io/fastcord) | [Documentation](https://github.com/dskprt/fastcord/wiki/Documentation)

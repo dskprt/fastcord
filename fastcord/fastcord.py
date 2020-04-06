@@ -19,7 +19,7 @@ class Fastcord:
         self.token = token
         self.verbose = verbose
         self.ws = websocket.WebSocketApp("wss://gateway.discord.gg/?v=6&encoding=json",
-            on_message=lambda ws, msg: self.on_message(ws, msg))
+            on_message=lambda ws, msg: self.on_message(ws, msg), on_close=lambda ws: self.on_close(ws))
         self.resume = False
         self.seq = None
         self.last_msg = None
@@ -39,12 +39,7 @@ class Fastcord:
             
             self.ws.send(json.dumps({ "op": 1, "d": self.seq }))
 
-            # if self.last_msg["op"] != 11 and self.ready:
-            #     self.ws.close()
-            #     self.resume = True
-            #     self.ws.run_forever()
-
-            time.sleep(self.interval / 1000 - 0.5)
+            time.sleep(self.interval / 1000)
     
     def change_presence(self, presence):
         if(type(presence) == Presence):
@@ -157,5 +152,14 @@ class Fastcord:
                 }))
 
                 self.resume = False
-
-        return
+    
+    def on_close(self, ws):
+        ws.run_forever()
+        ws.send(json.dumps({
+            "op": 6,
+            "d": {
+                "token": self.token,
+                "session_id": self.session_id,
+                "seq": self.seq
+            }
+        }))

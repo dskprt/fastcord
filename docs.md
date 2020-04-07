@@ -20,7 +20,7 @@ layout: default
   - [Role](#role)
   - [User](#user)
 
-### Fastcord
+## Fastcord
 `class fastcord.Fastcord(token, verbose=False)`  
 Used to create a Fastcord instance to interact with the Discord API  
 
@@ -77,7 +77,7 @@ Gets a Discord channel by its ID.
     - **channel_id** ([int](https://docs.python.org/3/library/functions.html#int))  
     The channels ID.
 
-### Events
+## Events
 How to use events:
 ```python
 import fastcord
@@ -91,7 +91,7 @@ def on_some_event(ARGS?):
 bot.run()
 ```
 
-#### Event types
+### Event types
 `message`
 Called when a message is sent.
    - **Arguments**
@@ -101,7 +101,7 @@ Called when a message is sent.
 `ready`
 Called when the bot is ready.
 
-### Discord Objects
+## Discord Objects
 Note: Discord objects **SHOULD NOT** be created manually!
 
 coming soontm

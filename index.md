@@ -5,7 +5,7 @@ layout: default
 Welcome to the fastcord website!
 **fastcord** is a simple Discord API wrapper for writing bots.
 
-[Documentation](docs.md)
+[Documentation](docs)
 
 ## Installing  
 **Python 3.6 or higher is required.**

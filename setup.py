@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(name="fastcord",
-    version="0.2.0",
+    version="0.2.1",
     description="another discord api wrapper for writing bots",
     author="dskprt",
     url="https://github.com/dskprt/fastcord",
@@ -10,6 +10,8 @@ setuptools.setup(name="fastcord",
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.6",
         "Operating System :: OS Independent"
     ],
     install_requires=[ "websocket-client" ],

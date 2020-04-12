@@ -1,3 +1,4 @@
+import platform
 import websocket
 import json
 import time
@@ -116,7 +117,7 @@ class Fastcord:
                 "d": {
                     "token": self.token,
                     "properties": {
-                        "$os": "linux",
+                        "$os": platform.system(),
                         "$browser": "fastcord",
                         "$device": "fastcord"
                     }
@@ -134,7 +135,7 @@ class Fastcord:
                 "d": {
                     "token": self.token,
                     "properties": {
-                        "$os": "linux",
+                        "$os": platform.system(),
                         "$browser": "fastcord",
                         "$device": "fastcord"
                     }

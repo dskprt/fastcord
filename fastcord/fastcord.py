@@ -88,6 +88,9 @@ class Fastcord:
     def load_command(self, command):
         self.commands[command.name] = command
     
+    def invalid_usage(self, msg, cmd, args):
+        msg.channel.send(f"Usage: {cmd} {' '.join(args)}")
+    
     def on_message(self, ws, msg):
         if self.verbose:
             print("MESSAGE: " + msg)
@@ -121,7 +124,22 @@ class Fastcord:
                     if s[0] == f"<@!{self.id}>":
                         for k, v in self.commands.items():
                             if k == s[1]:
-                                v.invoke(self, msg)
+                                if len(v.args) != 0:
+                                    args = [t.strip('"') for t in re.findall(r'[^\s"]+|"[^"]*"', ' '.join(s[2:]))]
+
+                                    if len(args) < len(v.args):
+                                        self.invalid_usage(msg, s[1], v.args)
+                                        break
+
+                                    _args = {}
+
+                                    for i in range(len(v.args)):
+                                        _args[v.args[i]] = args[i]
+
+                                    v.invoke(self, msg, _args)
+                                    break;
+
+                                v.invoke(self, msg, None)
                                 break
                 else:
                     s = re.split("\s+", msg.content)
@@ -131,7 +149,22 @@ class Fastcord:
 
                         for k, v in self.commands.items():
                             if k == cmd:
-                                v.invoke(self, msg)
+                                if len(v.args) != 0:
+                                    args = [t.strip('"') for t in re.findall(r'[^\s"]+|"[^"]*"', ' '.join(s[2:]))]
+
+                                    if len(args) < len(v.args):
+                                        self.invalid_usage(msg, cmd, v.args)
+                                        break
+
+                                    _args = {}
+
+                                    for i in range(len(v.args)):
+                                        _args[v.args[i]] = args[i]
+
+                                    v.invoke(self, msg, _args)
+                                    break;
+                                
+                                v.invoke(self, msg, None)
                                 break
 
                 self.events.call("message", msg)

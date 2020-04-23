@@ -33,7 +33,7 @@ class Fastcord:
         self.ready = False
         self.events = Events(verbose)
         self.on_event = self.events.on_event()
-        self.commands = {}
+        self.commands = []
     
     def run(self):
         self.ws.run_forever()
@@ -86,7 +86,7 @@ class Fastcord:
         return Channel(self, get(f"{self.api}/channels/{channel_id}", { "Authorization": "Bot " + self.token }))
 
     def load_command(self, command):
-        self.commands[command.name] = command
+        self.commands.append(command)
     
     def invalid_usage(self, msg, cmd, args):
         msg.channel.send(f"Usage: {cmd} {' '.join(args)}")
@@ -122,24 +122,24 @@ class Fastcord:
                     s = re.split("\s+", msg.content)
 
                     if s[0] == f"<@!{self.id}>":
-                        for k, v in self.commands.items():
-                            if k == s[1]:
-                                if len(v.args) != 0:
+                        for command in self.commands:
+                            if command.name == s[1]:
+                                if len(command.args) != 0:
                                     args = [t.strip('"') for t in re.findall(r'[^\s"]+|"[^"]*"', ' '.join(s[2:]))]
 
-                                    if len(args) < len(v.args):
-                                        self.invalid_usage(msg, s[1], v.args)
+                                    if len(args) < len(command.args):
+                                        self.invalid_usage(msg, s[1], command.args)
                                         break
 
                                     _args = {}
 
-                                    for i in range(len(v.args)):
-                                        _args[v.args[i]] = args[i]
+                                    for i in range(len(command.args)):
+                                        _args[command.args[i]] = args[i]
 
-                                    v.invoke(self, msg, _args)
+                                    command.invoke(self, msg, _args)
                                     break;
 
-                                v.invoke(self, msg, None)
+                                command.invoke(self, msg, None)
                                 break
                 else:
                     s = re.split("\s+", msg.content)
@@ -147,24 +147,24 @@ class Fastcord:
                     if msg.content.startswith(self.prefix):
                         cmd = s[0].replace(self.prefix, "", 1)
 
-                        for k, v in self.commands.items():
-                            if k == cmd:
-                                if len(v.args) != 0:
+                        for command in self.commands:
+                            if command.name == cmd:
+                                if len(command.args) != 0:
                                     args = [t.strip('"') for t in re.findall(r'[^\s"]+|"[^"]*"', ' '.join(s[2:]))]
 
-                                    if len(args) < len(v.args):
-                                        self.invalid_usage(msg, cmd, v.args)
+                                    if len(args) < len(command.args):
+                                        self.invalid_usage(msg, cmd, command.args)
                                         break
 
                                     _args = {}
 
-                                    for i in range(len(v.args)):
-                                        _args[v.args[i]] = args[i]
+                                    for i in range(len(command.args)):
+                                        _args[command.args[i]] = args[i]
 
-                                    v.invoke(self, msg, _args)
+                                    command.invoke(self, msg, _args)
                                     break;
                                 
-                                v.invoke(self, msg, None)
+                                command.invoke(self, msg, None)
                                 break
 
                 self.events.call("message", msg)

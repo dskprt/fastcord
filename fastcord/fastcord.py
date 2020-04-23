@@ -150,7 +150,7 @@ class Fastcord:
                         for command in self.commands:
                             if command.name == cmd:
                                 if len(command.args) != 0:
-                                    args = [t.strip('"') for t in re.findall(r'[^\s"]+|"[^"]*"', ' '.join(s[2:]))]
+                                    args = [t.strip('"') for t in re.findall(r'[^\s"]+|"[^"]*"', ' '.join(s[1:]))]
 
                                     if len(args) < len(command.args):
                                         self.invalid_usage(msg, cmd, command.args)

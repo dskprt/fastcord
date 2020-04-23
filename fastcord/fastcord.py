@@ -2,6 +2,8 @@ import platform
 import websocket
 import json
 import time
+import re
+import importlib
 from threading import Thread
 from .utils.events import Events
 from .utils.http import *
@@ -11,13 +13,15 @@ from .objects.guild import Guild
 from .objects.user import User
 from .objects.activity import Activity
 from .objects.presence import Presence
+from .command.command import Command
 
 class Fastcord:
 
     api = "https://discordapp.com/api"
 
-    def __init__(self, token, verbose=False):
+    def __init__(self, token, prefix=None, verbose=False):
         self.token = token
+        self.prefix = prefix
         self.verbose = verbose
         self.ws = websocket.WebSocketApp("wss://gateway.discord.gg/?v=6&encoding=json",
             on_message=lambda ws, msg: self.on_message(ws, msg), on_close=lambda ws: self.on_close(ws))
@@ -29,6 +33,7 @@ class Fastcord:
         self.ready = False
         self.events = Events(verbose)
         self.on_event = self.events.on_event()
+        self.commands = {}
     
     def run(self):
         self.ws.run_forever()
@@ -79,6 +84,9 @@ class Fastcord:
     
     def get_channel(self, channel_id):
         return Channel(self, get(f"{self.api}/channels/{channel_id}", { "Authorization": "Bot " + self.token }))
+
+    def load_command(self, command):
+        self.commands[command.name] = command
     
     def on_message(self, ws, msg):
         if self.verbose:
@@ -105,7 +113,28 @@ class Fastcord:
                 self.events.call("ready")
             
             if msg["t"] == "MESSAGE_CREATE":
-                self.events.call("message", Message(self, msg["d"]))
+                msg = Message(self, msg["d"])
+
+                if not self.prefix:
+                    s = re.split("\s+", msg.content)
+
+                    if s[0] == f"<@!{self.id}>":
+                        for k, v in self.commands.items():
+                            if k == s[1]:
+                                v.invoke(self, msg)
+                                break
+                else:
+                    s = re.split("\s+", msg.content)
+
+                    if msg.content.startswith(self.prefix):
+                        cmd = s[0].replace(self.prefix, "", 1)
+
+                        for k, v in self.commands.items():
+                            if k == cmd:
+                                v.invoke(self, msg)
+                                break
+
+                self.events.call("message", msg)
 
         if msg["op"] == 9: # opcode 9 invalid session
             time.sleep(5)

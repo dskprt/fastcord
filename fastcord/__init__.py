@@ -9,3 +9,4 @@ from .objects.presence import Presence, Status
 from .objects.reaction import Reaction
 from .objects.role import Role
 from .objects.user import User
+from .command.command import Command

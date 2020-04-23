@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(name="fastcord",
-    version="0.2.1",
+    version="0.3.0",
     description="another discord api wrapper for writing bots",
     author="dskprt",
     url="https://github.com/dskprt/fastcord",

@@ -6,7 +6,7 @@ from ..utils.dict import try_get_value
 class Presence():
 
     def __init__(self, fastcord=None, obj=None):
-        if(obj == None):
+        if obj == None:
             self.presence = {}
             self.presence["since"] = None
             self.presence["game"] = None

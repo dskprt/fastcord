@@ -11,7 +11,7 @@ class Channel:
     def __init__(self, fastcord, obj):
         self.fastcord = fastcord
         self.id = obj["id"]
-        #self.type = ChannelType(obj["type"]) doesn't work for some reason
+        self.type = self.ChannelType(obj["type"])
         self.nsfw = try_get_value(obj, "nsfw")
         self.name = try_get_value(obj, "name")
         self.slowmode = try_get_value(obj, "rate_limit_per_user")
@@ -19,11 +19,11 @@ class Channel:
         self.owner = None
         self.guild = None
 
-        if(try_get_value(obj, "owner_id") != None):
+        if try_get_value(obj, "owner_id") != None:
             self.owner = User(self.fastcord, get(f"{fastcord.api}/users/{obj['owner_id']}",
                 { "Authorization": "Bot " + self.fastcord.token }))
         
-        if(try_get_value(obj, "guild_id") != None):
+        if try_get_value(obj, "guild_id") != None:
             self.guild = Guild(self.fastcord, get(f"{fastcord.api}/guilds/{obj['guild_id']}",
                 { "Authorization": "Bot " + self.fastcord.token }))
     
@@ -32,15 +32,15 @@ class Channel:
 
         body = {}
 
-        if(content != None): body["content"] = content
+        if content != None: body["content"] = content
         
-        if(embed != None):
-            if(type(embed) == dict):
+        if embed != None:
+            if type(embed) == dict:
                 body["embed"] = embed
-            elif(type(embed) == Embed):
+            elif type(embed) == Embed:
                 body["embed"] = embed.embed
         
-        if(file != None):
+        if file != None:
             return Message(self.fastcord, multipart(f"{self.fastcord.api}/channels/{self.id}/messages",
                 { "payload_json": (None, json.dumps(body)), f"file": (filename, file) },
                 { "Authorization": "Bot " + self.fastcord.token }))

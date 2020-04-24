@@ -27,10 +27,8 @@ class Fastcord:
             on_message=lambda ws, msg: self.on_message(ws, msg), on_close=lambda ws: self.on_close(ws))
         self.resume = False
         self.seq = None
-        self.last_msg = None
         self.interval = None
         self.session_id = None
-        self.ready = False
         self.events = Events(verbose)
         self.on_event = self.events.on_event()
         self.commands = []
@@ -48,10 +46,10 @@ class Fastcord:
             time.sleep(self.interval / 1000)
     
     def change_presence(self, presence):
-        if(type(presence) == Presence):
+        if type(presence) == Presence:
             presence = presence.presence
         
-        if(presence["status"] == None):
+        if presence["status"] == None:
             raise TypeError("Presence status must be defined!")
 
         self.ws.send(json.dumps({
@@ -60,10 +58,10 @@ class Fastcord:
         }))
     
     def change_activity(self, activity):
-        if(type(activity) == Activity):
+        if type(activity) == Activity:
             activity = activity.activity
         
-        if(activity["name"] == None or activity["type"] == None):
+        if activity["name"] == None or activity["type"] == None:
             raise TypeError("Activity name and type must be defined!")
 
         self.ws.send(json.dumps({
@@ -96,7 +94,6 @@ class Fastcord:
             print("MESSAGE: " + msg)
         
         msg = json.loads(msg)
-        self.last_msg = msg
         
         if msg["s"]:
             self.seq = msg["s"]
@@ -108,7 +105,6 @@ class Fastcord:
 
             if msg["t"] == "READY":
                 self.session_id = msg["d"]["session_id"]
-                self.ready = True
 
                 self.username = msg["d"]["user"]["username"]
                 self.id = msg["d"]["user"]["id"]
@@ -121,7 +117,7 @@ class Fastcord:
                 if not self.prefix:
                     s = re.split("\s+", msg.content)
 
-                    if s[0] == f"<@!{self.id}>":
+                    if s[0] == f"<@!{self.id}>" :
                         for command in self.commands:
                             if command.name == s[1]:
                                 if len(command.args) != 0:

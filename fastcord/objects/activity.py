@@ -5,15 +5,15 @@ from ..utils.dict import try_get_value
 class Activity():
 
     def __init__(self, name=None, _type=None, fastcord=None, obj=None):
-        if(obj == None):
+        if obj == None:
             self.activity = {}
             self.activity["name"] = "fastcord"
             self.activity["type"] = 0
             
-            if(name != None):
+            if name != None:
                 self.activity["name"] = name
             
-            if(_type != None):
+            if _type != None:
                 self.activity["type"] = _type.value
 
             return None
@@ -42,7 +42,7 @@ class Activity():
         return self
     
     def url(self, url):
-        if(self.activity["type"] != 1): return
+        if self.activity["type"] != 1: return
 
         self.activity["url"] = url
         return self

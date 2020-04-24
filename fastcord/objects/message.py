@@ -31,21 +31,21 @@ class Message:
         for item in obj["embeds"]:
             self.attachments.append(Embed(fastcord, item))
 
-        if(try_get_value(obj, "reactions") != None):
+        if try_get_value(obj, "reactions") != None:
             for item in obj["reactions"]:
                 self.attachments.append(Reaction(fastcord, item))
 
     def edit(self, content = None, embed = None):
         body = { }
 
-        if(content != None): body["content"] = content
+        if content != None:
+            body["content"] = content
 
-        if(embed != None):
-            if(type(embed) == dict):
+        if embed != None:
+            if type(embed) == dict:
                 body["embed"] = embed
-            elif(type(embed) == Embed):
+            elif type(embed) == Embed:
                 body["embed"] = embed.embed
 
-        return Message(self.fastcord, patch(f"{self.fastcord.api}/channels/{self.channel.id}/messages/{self.id}",
-            body,
-            { "Authorization": "Bot " + self.fastcord.token }))
+        return Message(self.fastcord,
+            patch(f"{self.fastcord.api}/channels/{self.channel.id}/messages/{self.id}", body, { "Authorization": "Bot " + self.fastcord.token }))

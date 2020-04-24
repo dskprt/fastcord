@@ -14,7 +14,7 @@ class User:
         
         self.bot = False
 
-        if(try_get_value(obj, "bot") != None):
+        if try_get_value(obj, "bot") != None:
             self.bot = obj["bot"]
     
     class Member():

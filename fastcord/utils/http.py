@@ -103,7 +103,7 @@ def encode_multipart_formdata(fields):
     body = b""
 
     for key, value in fields.items():
-        if(type(value) != tuple):
+        if type(value) != tuple:
             value = (key, value)
         
         name = key
@@ -143,9 +143,8 @@ def encode_multipart_formdata(fields):
         body += b"Content-Type: "
         body += content.encode("latin-1")
         body += b"\r\n"
-        #body += b"\r\n"
 
-        if(type(contents) == str):
+        if type(contents) == str:
             body += contents.encode("latin-1")
         else:
             body += contents

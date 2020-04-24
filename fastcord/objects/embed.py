@@ -5,7 +5,7 @@ from ..utils.date import to_iso8601
 class Embed:
 
     def __init__(self, fastcord=None, obj=None):
-        if(obj == None):
+        if obj == None:
             self.embed = {}
             self.embed["footer"] = {}
             self.embed["author"] = {}
@@ -28,25 +28,25 @@ class Embed:
         self._author = None
         self._fields = []
         
-        if(try_get_value(obj, "footer") != None):
+        if try_get_value(obj, "footer") != None:
             self._footer = self.Footer(obj["footer"])
 
-        if(try_get_value(obj, "image") != None):
+        if try_get_value(obj, "image") != None:
             self._image = self.Image(obj["image"])
 
-        if(try_get_value(obj, "thumbnail") != None):
+        if try_get_value(obj, "thumbnail") != None:
             self._thumbnail = self.Thumbnail(obj["thumbnail"])
         
-        if(try_get_value(obj, "video") != None):
+        if try_get_value(obj, "video") != None:
             self._video = self.Video(obj["video"])
         
-        if(try_get_value(obj, "provider") != None):
+        if try_get_value(obj, "provider") != None:
             self._provider = self.Provider(obj["provider"])
         
-        if(try_get_value(obj, "author") != None):
+        if try_get_value(obj, "author") != None:
             self._author = self.Author(obj["author"])
         
-        if(try_get_value(obj, "fields") != None):
+        if try_get_value(obj, "fields") != None:
             for item in obj["fields"]:
                 self._fields.append(self.Field(item))
     
@@ -91,7 +91,7 @@ class Embed:
         return self
     
     def description(self, text, override=True):
-        if(override):
+        if override:
             self.embed["description"] = text
         else:
             self.embed["description"] += text
@@ -111,12 +111,12 @@ class Embed:
         return self
     
     def footer(self, text, icon = None, override = True):
-        if(override):
+        if override:
             self.embed["footer"]["text"] = text
         else:
             self.embed["footer"]["text"] += text
 
-        if(icon != None):
+        if icon != None:
             self.embed["footer"]["icon_url"] = icon
         
         return self
@@ -136,8 +136,8 @@ class Embed:
     def author(self, name, url = None, icon = None):
         self.embed["author"]["name"] = name
 
-        if(url != None): self.embed["author"]["url"] = url
-        if(icon != None): self.embed["author"]["icon_url"] = icon
+        if url != None: self.embed["author"]["url"] = url
+        if icon != None: self.embed["author"]["icon_url"] = icon
 
         return self
     
@@ -146,9 +146,9 @@ class Embed:
         return self
     
     def update_field(self, index, name=None, value=None, inline=None):
-        if(name != None): self.embed["fields"][index]["name"] = name
-        if(value != None): self.embed["fields"][index]["value"] = value
-        if(inline != None): self.embed["fields"][index]["inline"] = inline
+        if name != None: self.embed["fields"][index]["name"] = name
+        if value != None: self.embed["fields"][index]["value"] = value
+        if inline != None: self.embed["fields"][index]["inline"] = inline
 
         return self
     

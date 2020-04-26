@@ -23,15 +23,15 @@ class Activity():
         self._name = obj["name"]
         self._type = ActivityType(obj["type"])
         self._url = try_get_value(obj, "url")
-        self._start = try_get_value(try_get_value(obj, "timestamps"), "start")
-        self._end = try_get_value(try_get_value(obj, "timestamps"), "end")
-        self._app_id = try_get_value(obj, "application_id")
-        self._details = try_get_value(obj, "details")
-        self._state = try_get_value(obj, "state")
-        self._large_image = try_get_value(try_get_value(obj, "assets"), "large_image")
-        self._large_text = try_get_value(try_get_value(obj, "assets"), "large_text")
-        self._small_image = try_get_value(try_get_value(obj, "assets"), "small_image")
-        self._small_text = try_get_value(try_get_value(obj, "assets"), "small_text")
+        self.start = try_get_value(try_get_value(obj, "timestamps"), "start")
+        self.end = try_get_value(try_get_value(obj, "timestamps"), "end")
+        self.app_id = try_get_value(obj, "application_id")
+        self.details = try_get_value(obj, "details")
+        self.state = try_get_value(obj, "state")
+        self.large_image = try_get_value(try_get_value(obj, "assets"), "large_image")
+        self.large_text = try_get_value(try_get_value(obj, "assets"), "large_text")
+        self.small_image = try_get_value(try_get_value(obj, "assets"), "small_image")
+        self.small_text = try_get_value(try_get_value(obj, "assets"), "small_text")
     
     def name(self, name):
         self.activity["name"] = name

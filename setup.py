@@ -5,7 +5,7 @@ setuptools.setup(name="fastcord",
     description="another discord api wrapper for writing bots",
     author="dskprt",
     url="https://github.com/dskprt/fastcord",
-    packages=[ "fastcord", "fastcord.utils", "fastcord.objects" ],
+    packages=[ "fastcord", "fastcord.utils", "fastcord.objects", "fastcord.command" ],
     classifiers = [
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",

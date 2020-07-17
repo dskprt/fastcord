@@ -17,7 +17,7 @@ from .command.command import Command
 
 class Fastcord:
 
-    api = "https://discordapp.com/api"
+    api = "https://discord.com/api"
 
     def __init__(self, token, prefix=None, verbose=False):
         self.token = token

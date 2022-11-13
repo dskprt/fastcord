@@ -23,7 +23,7 @@ class Fastcord:
         self.token = token
         self.prefix = prefix
         self.verbose = verbose
-        self.ws = websocket.WebSocketApp("wss://gateway.discord.gg/?v=6&encoding=json",
+        self.ws = websocket.WebSocketApp("wss://gateway.discord.com/?v=6&encoding=json",
             on_message=lambda ws, msg: self.on_message(ws, msg), on_close=lambda ws: self.on_close(ws))
         self.resume = False
         self.seq = None
